@@ -1,0 +1,264 @@
+//including header files
+#include<stdio.h>
+#include<stdlib.h>
+#include<string.h>
+
+
+typedef struct food{
+
+    struct FOOD_amount *f;
+    struct food *next;
+
+    }FOOD;
+
+    struct FOOD_amount
+    {
+        int amount_rice;
+        int amount_pulse;
+        int amount_chapati;
+        int amount_veg;
+        int amount_supple;
+    };
+//new entry function
+FOOD *new_entry(FOOD *first)
+{
+    FILE *ptr;
+    ptr=fopen("record.txt","a+");
+    FOOD *newnode,*temp;
+    newnode=(FOOD*)malloc(sizeof(FOOD));
+    newnode->next=NULL;
+    printf("Enter the amount wasted :\n");
+    //scanf("%d",&newfood->amount);
+    printf("\n\tdetails:\n");
+    printf("\n\tenter the amount of rice (in kg):");
+    scanf("%d",&newnode->f->amount_rice);
+    printf("\n\tenter the amount of pulse (in kg):");
+    scanf("%d",&newnode->f->amount_pulse);
+    printf("\n\tenter the no of chapatis :");
+    scanf("%d",&newnode->f->amount_chapati);
+    printf("\n\tenter the amount of vegetables (in kg):");
+    scanf("%d",&newnode->f->amount_veg);
+    printf("\n\tenter the amount of other supplementary (in kg):");
+    scanf("%d",&newnode->f->amount_supple);
+    if(first==NULL)
+    {
+        first=newnode;
+    }
+    else
+    {
+        temp=first;
+        while(temp->next!=NULL)
+            temp=temp->next;
+
+            temp->next=newnode;
+    }
+   // printf("\n\n%dkg food is added at end of the list\n",newfood->amount);
+    //fprintf(ptr,"%d\t",newfood->amount);
+    fprintf(ptr,"%d\t%d\t%d\t%d\t%d\t",newnode->f->amount_rice,newnode->f->amount_pulse,newnode->f->amount_chapati,newnode->f->amount_veg,newnode->f->amount_supple);
+    fclose(ptr);
+return first;
+}
+
+//function to view food amount wasted
+void view_list(FOOD *first)
+{
+	FILE *fp;
+	FOOD *temp;
+	fp=fopen("record.txt","r+");
+
+	if(fp==NULL)
+    {
+        printf("File don't exists\n");
+        exit(0);
+    }
+temp=first;
+  printf("Waste Details......\n\n");
+while(fscanf(fp,"%d\t%d\t%d\t%d\t%d\t",&first->f->amount_rice,&first->f->amount_pulse,&first->f->amount_chapati,&first->f->amount_veg,&first->f->amount_supple)!=EOF){
+
+            if(first==NULL)
+        {
+             printf("Empty list\n");
+             return;
+        }
+
+           while(temp!=NULL)
+        {
+            printf("%d\t",temp->amount);
+            temp=temp->next;
+        }
+}
+fclose(fp);
+}
+void calculate(FOOD *first)
+{
+    int sum=0,res;
+    FILE *fptr;
+    fptr=fopen("record.txt","r+");
+    FOOD *p=first;
+    fscanf(fptr,"%d\t",&first->amount);
+            while(p!=NULL)
+            {
+                sum=sum+p->amount;
+                p=p->next;
+            }
+
+
+    printf("\nWastage till now :%d\n",sum);
+    res=sum*30;
+    printf("\nWaste around month:%d\n",res);
+    fclose(fptr);
+
+}
+void doner(int ch)
+{
+    struct doner_info
+    {
+        char name[20];
+        char usn[10];
+        int age;
+        int room_no;
+    }donr_inf;
+
+    FILE *fp;
+    fp=fopen("doner.txt","a");
+    printf("Enter name of doner\n");
+    scanf("%s",donr_inf.name);
+    printf("Enter usn of doner\n");
+    scanf("%s",donr_inf.usn);
+    printf("Enter age of doner\n");
+    scanf("%d",&donr_inf.age);
+    printf("Enter room  no. of doner\n");
+    scanf("%d",&donr_inf.room_no);
+    fprintf(fp,"%s\t",donr_inf.name);
+    fprintf(fp,"%s\t",donr_inf.usn);
+    fprintf(fp,"%d\t",donr_inf.age);
+    fprintf(fp,"%d\n",donr_inf.room_no);
+    if(ch==1)
+    {
+        printf("%s donated to orphanage\n",donr_inf.name);
+    }
+    else
+    {
+        printf("%s donated to NGO\n",donr_inf.name);
+    }
+    fclose(fp);
+}
+void menu()
+{
+    printf("How to donate the left over food\n?");
+    int ch;
+    printf("\n 1 Donate to orphanage\t");
+    printf("\n 2 Donate to NGO\n");
+    printf("\n Enter the choice\n");
+    scanf("%d",&ch);
+    if(ch>2)
+    {
+        printf("Enter valid choice\n");
+        exit(0);
+    }
+    doner(ch);
+
+}
+#define total_people 200
+void donate(int n)
+{
+    if(n==total_people)
+    {
+        printf("NO FOOD LEFT\n");
+    }
+    else if(n>total_people)
+    {
+        printf("Unknown People in the House\n");
+    }
+    else
+    {
+        printf("%d Needy people can be feeded\n\n",total_people-n);
+    menu();
+    }
+}
+void del_node(FOOD *first)
+{
+
+    FILE *fptr;
+    fptr=fopen("record.txt","r");
+    FOOD *temp;
+    while(fscanf(fptr,"%d\t",&first->amount)!=EOF)
+    {
+        if(first==NULL)
+        {
+            printf("No FOOD IS LEFT IN LIST\n");
+           return ;
+        }
+        temp =first;
+    first=first->next;
+    free(temp);
+    }
+    fclose(fptr);
+}
+//main function
+int main(){
+    char user[10] = "DSopen",usern[10];
+    char pass[5] = "pass",passn[5];
+    int ic=0;
+
+    for(int i=0;i<3;i++){
+        printf("\n\n\t\t\tLogin:\n");
+        printf("\n\t\t\tUser name: ");
+        scanf("%s",usern);
+        printf("\n\t\t\tPassword: ");
+        scanf("%s",passn);
+        if((strcmp(user,usern) == 0)&&(strcmp(pass,passn)==0)){
+            ic++;
+            break;
+        }
+        printf("\n\t\t\tWrong User name or password\n");
+        system("cls");
+    }
+    if(ic==0){
+        printf("\n\n\t\tInvalid User name or Password\n");
+        exit(0);
+    }
+    system("cls");
+    FOOD *first=NULL;
+    int choice,n;
+    char ch;
+    printf("\n\n\t\t\t LEFTOVER FOOD MANAGEMENT SYSTEM\n\n");
+    printf("\n\n\t\t\t    WELCOME TO THE MAIN MENU\n\n");
+    while(1)
+        {
+            printf("\n\n1)Insert amount of food \n\n");
+            printf("2)Display the list of food\n\n");
+            printf("3)Calculate the total food wasted in month\n\n");
+            printf("4)Donation\n\n");
+            printf("5)Has wasted food sent to energy plant\n\n");
+            printf("Enter the choice\n");
+            scanf("%d",&choice);
+            switch(choice)
+            {
+
+                case 1:first=new_entry(first);
+                break;
+                case 2:view_list(first);
+                break;
+                case 3:calculate(first);
+                break;
+                case 4:printf("Enter the no. of people\n");
+                scanf("%d",&n);
+                    donate(n);
+                break;
+                case 5:printf("Enter y:YES or n:NO\n");
+                       scanf("%c",&ch);
+                       getchar();
+                       if(ch=='y')
+                       {
+                           del_node(first);
+                           printf("The Food amount has been deleted\n");
+                       }
+
+                break;
+                default:printf("Wrong choice\n");
+                exit(0);
+            }
+    }
+  return 0;
+}
